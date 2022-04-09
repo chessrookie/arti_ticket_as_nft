@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <!-- Moralis SDK code -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+    <script src="functions.js"></script>
+  </head>
+
+  <style>
+    .ticketContainer {
+      display: inline-block;
+      width: 150px;
+    }
+
+    .nftImage {
+      width: 100px;
+    }
+  </style>
+
+  <body>
+    <h1>ARTI NFT Ticket</h1>
+    <h4 id="address"></h4>
+
+    <div>
+      <button id="btn-login">Connect Wallet</button>
+      <button id="btn-logout">Disconnect Wallet</button>
+      <button id="btn-getNFTs">Get my NFTs</button>
+    </div>
+
+    <script>
+      const serverUrl = "https://ntfotrnbhuvq.usemoralis.com:2053/server";
+      const appId = "WzTs7p1EvwOlLgW6tAQHaYjEYVva4GPgUgk4IvoN";
+      Moralis.start({ serverUrl, appId });
+      
+      document.getElementById("btn-login").onclick = login;
+      document.getElementById("btn-logout").onclick = logOut;
+      document.getElementById("btn-getNFTs").onclick = getNFTs;
+
+    </script>
+
+    <div id="container"></div>
+
+  </body>
+</html>
