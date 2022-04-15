@@ -32,6 +32,8 @@
       const serverUrl = "https://ntfotrnbhuvq.usemoralis.com:2053/server";
       const appId = "WzTs7p1EvwOlLgW6tAQHaYjEYVva4GPgUgk4IvoN";
       Moralis.start({ serverUrl, appId });
+
+      Moralis.enableWeb3();
       
       document.getElementById("btn-login").onclick = login;
       document.getElementById("btn-logout").onclick = logOut;

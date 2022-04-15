@@ -31,17 +31,26 @@ async function getNFTs() {
 
   nfts.result.forEach(nft => {
     console.log(nft);
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     div.classList.add('ticketContainer');
 
-    var tokenId = document.createElement('h3');
+    let tokenId = document.createElement('h3');
     tokenId.innerHTML = 'Ticket ID: ' + nft.token_id;
     div.appendChild(tokenId);
 
-    var img = document.createElement('img');
+    let img = document.createElement('img');
     img.classList.add('nftImage');
     img.src = nft.token_uri;
     div.appendChild(img);
+
+    div.appendChild(document.createElement('br'));
+
+    let sendBtn = document.createElement('button');
+    sendBtn.innerHTML = 'Send'
+    sendBtn.addEventListener('click', function(){
+      sendTicket(nft.token_id);
+    });
+    div.appendChild(sendBtn);
 
     document.getElementById('container').appendChild(div);
   });
@@ -49,12 +58,27 @@ async function getNFTs() {
 
 async function mintTicket(){
   let wallet = await getWallet();
-  let price = Moralis.Units.Token('0.1', '18')
   let web3 = new Web3(window.ethereum);
+  let price = Moralis.Units.Token('0.1', '18')
   let contract_instance = new web3.eth.Contract(ABI, CONTRACT);
   await contract_instance.methods
     .mintTicket(wallet)
     .send({value: price, from: wallet});
+}
+
+async function sendTicket(ticketId) {
+  let receiver_address = prompt("Please enter receiver address", "0x4F1256D7B3B10a82e48d3982bbC586C532BBe860");
+
+  const options = {
+    type: 'erc721',
+    receiver: receiver_address,
+    contract_address: CONTRACT,
+    token_id: ticketId
+  };
+  await Moralis.authenticate();
+  await Moralis.enableWeb3();
+  let result = await Moralis.transfer(options);
+  console.log(result);
 }
 
 async function getWallet() {
@@ -63,6 +87,5 @@ async function getWallet() {
     await login();
     return;
   }
-
   return user.get('ethAddress');
 }
